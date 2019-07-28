@@ -24,7 +24,6 @@ def odometry_callback(msg):
 
 if __name__ == '__main__':
     rospy.init_node('move_around', anonymous=True)
-    rospy.Subscriber("odom", Odometry, odometry_callback)
     pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     reset_odom = rospy.Publisher('reset', Empty, queue_size=10)
     rate = rospy.Rate(2)
@@ -36,5 +35,7 @@ if __name__ == '__main__':
     reset_odom.publish(Empty())
 
     print "Run"
+    rate.sleep()
+    rospy.Subscriber("odom", Odometry, odometry_callback)
     rospy.spin()
 
