@@ -6,7 +6,7 @@ from std_msgs.msg import Empty
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
 from time import time
 
-pub = nil
+pub = 0
 
 def odometry_callback(msg):
     print msg.pose.pose
@@ -27,11 +27,14 @@ if __name__ == '__main__':
     rospy.Subscriber("odom", Odometry, odometry_callback)
     pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     reset_odom = rospy.Publisher('reset', Empty, queue_size=10)
+    rate = rospy.Rate(2)
 
-    # reset odometry (these messages take a few iterations to get through)
-    timer = time()
-    while time() - timer < 0.25:
-        reset_odom.publish(Empty())
+    print "wait for subscribing topics"
+    rate.sleep()
 
+    print "Reset odom"
+    reset_odom.publish(Empty())
+
+    print "Run"
     rospy.spin()
 
